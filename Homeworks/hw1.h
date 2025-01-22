@@ -6,52 +6,67 @@
 #include <ctype.h>
 #include <string.h>
 
-char **tokenize(char *string) {
-    if (!string) return NULL;
-    
-    char **tokens = NULL;
-    size_t count = 0;
+#include <stdlib.h>
+#include <ctype.h>
+
+char ** tokenize( char * string ) {
+    if (string == NULL) {
+        return NULL;
+    }
+    size_t capacity = 10; 
+    size_t count = 0;  
+
+    char ** tokens = (char **)calloc(capacity, sizeof(char *));
+    if (tokens == NULL) {
+        return NULL;
+    }
+
     char *ptr = string;
-    char *start = NULL;
     
     while (*ptr) {
-        if (isalpha(*ptr)) {
-            if (!start) {
-                start = ptr;
+        while (*ptr && !isalpha((unsigned char)*ptr)) {
+            ptr++;
+        }
+
+        char *start = ptr;
+
+        while (*ptr && isalpha((unsigned char)*ptr)) {
+            ptr++;
+        }
+
+        size_t length = ptr - start;
+
+        if (length >= 2) {
+            tokens[count] = start;
+            count++;
+
+            if (*ptr) {
+                *ptr = '\0';
+                ptr++;
+            }
+
+            //resize if neeeded
+            if (count >= capacity) {
+                size_t new_capacity = capacity * 2;
+                char ** temp = (char **)realloc(tokens, new_capacity * sizeof(char *));
+
+                if (temp == NULL) {
+                    free(tokens);
+                    return NULL;
+                }
+
+                tokens = temp;
+                capacity = new_capacity;
             }
         } else {
-            if (start) {
-                if (ptr - start >= 2) { // Ensure at least two characters for a valid word
-                    *ptr = '\0';
-                    char **temp = (char **)realloc(tokens, (count + 2) * sizeof(char *));
-                    if (!temp) {
-                        free(tokens);
-                        return NULL;
-                    }
-                    tokens = temp;
-                    tokens[count++] = start;
-                    tokens[count] = NULL;
-                }
-                start = NULL;
+            if (*ptr) {
+                ptr++;
             }
         }
-        ptr++;
     }
-    
-    // Handle last word if the string ends with a valid word
-    if (start && (ptr - start >= 2)) {
-        char **temp = (char **)realloc(tokens, (count + 2) * sizeof(char *));
-        if (!temp) {
-            free(tokens);
-            return NULL;
-        }
-        tokens = temp;
-        tokens[count++] = start;
-        tokens[count] = NULL;
-    }
-    
+    tokens[count] = NULL;
+
     return tokens;
 }
 
-
-#endif
+#endif 
