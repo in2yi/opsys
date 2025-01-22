@@ -10,6 +10,7 @@
 #include <ctype.h>
 
 char ** tokenize( char * string ) {
+    printf("string begining : %s\n", string);
     if (string == NULL) {
         return NULL;
     }
@@ -22,7 +23,7 @@ char ** tokenize( char * string ) {
     }
 
     char *ptr = string;
-    
+
     while (*ptr) {
         while (*ptr && !isalpha((unsigned char)*ptr)) {
             ptr++;
@@ -37,7 +38,7 @@ char ** tokenize( char * string ) {
         size_t length = ptr - start;
 
         if (length >= 2) {
-            tokens[count] = start;
+            *(tokens + count) = start;
             count++;
 
             if (*ptr) {
@@ -63,9 +64,26 @@ char ** tokenize( char * string ) {
                 ptr++;
             }
         }
+
+        printf("Original string for each step:\n");
+        for (size_t i = 0; i < strlen(string); i++) {
+            if (string[i] == '\0') {
+                printf("\\0");
+            } else {
+                printf("%c", string[i]);
+            }
+        }
     }
     tokens[count] = NULL;
-
+    printf("Original string after tokenization (with '\\0' characters):\n");
+    for (size_t i = 0; i < strlen(string); i++) {
+        if (string[i] == '\0') {
+            printf("\\0");
+        } else {
+            printf("%c", string[i]);
+        }
+    }
+    printf("\n\n");
     return tokens;
 }
 
