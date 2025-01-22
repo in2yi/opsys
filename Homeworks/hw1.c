@@ -78,7 +78,7 @@ void process_file(const char *filename, char **cache, int cache_size) {
             strcpy(*(cache + index), lower_word);
             printf("Word \"%s\" ==> %d (calloc)\n", original_word, index);
         } else if (strcmp(*(cache + index), lower_word) != 0) {
-
+            size_t old_size = strlen(*(cache + index));
             *(cache + index) = (char *)realloc(*(cache + index), strlen(lower_word) + 1);
 
             if (*(cache + index) == NULL) {
@@ -86,8 +86,13 @@ void process_file(const char *filename, char **cache, int cache_size) {
                 exit(EXIT_FAILURE);
             }
 
+            if (strlen(lower_word) == old_size) {
+                printf("Word \"%s\" ==> %d (nop)\n", original_word, index);
+            } else {
+                printf("Word \"%s\" ==> %d (realloc)\n", original_word, index);
+            }
+
             strcpy(*(cache + index), lower_word);
-            printf("Word \"%s\" ==> %d (realloc)\n", original_word, index);
         } else {
             printf("Word \"%s\" ==> %d (nop)\n", original_word, index);
         }
