@@ -10,12 +10,11 @@
 #include <ctype.h>
 
 char ** tokenize( char * string ) {
-    printf("string begining : %s\n", string);
     if (string == NULL) {
         return NULL;
     }
     size_t capacity = 10; 
-    size_t count = 0;  
+    size_t count = 0; 
 
     char ** tokens = (char **)calloc(capacity, sizeof(char *));
     if (tokens == NULL) {
@@ -36,7 +35,6 @@ char ** tokenize( char * string ) {
         }
 
         size_t length = ptr - start;
-
         if (length >= 2) {
             *(tokens + count) = start;
             count++;
@@ -64,26 +62,8 @@ char ** tokenize( char * string ) {
                 ptr++;
             }
         }
-
-        printf("Original string for each step:\n");
-        for (size_t i = 0; i < strlen(string); i++) {
-            if (string[i] == '\0') {
-                printf("\\0");
-            } else {
-                printf("%c", string[i]);
-            }
-        }
     }
-    tokens[count] = NULL;
-    printf("Original string after tokenization (with '\\0' characters):\n");
-    for (size_t i = 0; i < strlen(string); i++) {
-        if (string[i] == '\0') {
-            printf("\\0");
-        } else {
-            printf("%c", string[i]);
-        }
-    }
-    printf("\n\n");
+    *(tokens + count) = NULL;
     return tokens;
 }
 

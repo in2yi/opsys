@@ -100,7 +100,7 @@ void process_file(const char *filename, char **cache, int cache_size) {
 
 int main(int argc, char **argv) {
     if (argc < 3) {
-        fprintf(stderr, "ERROR: Usage: %s <cache_size> <file1> [file2 ...]\n", *(argv + 0));
+        fprintf(stderr, "ERROR: Usage: %s <cache_size> <file1> file2 ...\n", *(argv + 0));
         return EXIT_FAILURE;
     }
 
@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
     printf("\nCache:\n");
     for (int i = 0; i < cache_size; i++) {
         if (*(cache + i) != NULL) {
-            printf("[%d] ==> \"%s\"\n", i, *( cache + i ));
+            printf("%c%d%c ==> \"%s\"\n", 91, i, 93, *( cache + i ));
             free(*( cache + i )); 
         }
     }
